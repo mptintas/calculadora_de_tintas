@@ -1,15 +1,35 @@
 import streamlit as st
 
+# Função para validar e converter entrada numérica
+def validar_entrada(texto):
+    texto = texto.replace(",", ".")  # Substitui vírgulas por pontos
+    try:
+        return float(texto)
+    except ValueError:
+        st.error("Por favor, insira um número válido.")
+        st.stop()
+
 def calcular_rendimento_e_espessura():
-    st.title("MP TINTAS EPÓXI")
-    st.header("Calculadora de Rendimento e Espessura de tintas")
-    st.write("Preencha os campos abaixo para calcular o rendimento e espessura da tinta.")
+    # Cria colunas para centralizar a imagem    
+    col1, col2, col3 = st.columns([1, 2, 1])
 
-    # Entrada de dados
-    volume_tinta = st.number_input("Digite o volume de tinta (em litros):", min_value=0.0, format="%.2f")
-    teor_solidos = st.number_input("Digite o teor de sólidos (em %):", min_value=0.0, max_value=100.0, format="%.2f")
-    area = st.number_input("Digite a área a ser pintada (em m²):", min_value=0.0, format="%.2f")
+    with col2:  # Coloca o logotipo na coluna do meio
+        st.image("Logo.png", width=300)
 
+    st.header("Calculadora de Espessura e Rendimento de Tintas")
+    st.write("Conheça a espessura final da aplicação com base no Teor de Sólidos e da área a ser revestida")
+
+    # Entrada de dados sem sinais de + e -
+    volume_tinta = st.text_input("Digite o volume de tinta (em litros):", "0,00")
+    teor_solidos = st.text_input("Digite o teor de sólidos (em %):", "0,00")
+    area = st.text_input("Digite a área a ser pintada (em m²):", "0,00")
+
+    # Validação e conversão das entradas
+    volume_tinta = validar_entrada(volume_tinta)
+    teor_solidos = validar_entrada(teor_solidos)
+    area = validar_entrada(area)
+
+    # Botão para calcular
     if st.button("Calcular"):
         if volume_tinta <= 0 or teor_solidos <= 0 or area <= 0:
             st.error("Os valores de volume, teor de sólidos e área devem ser maiores que zero.")
